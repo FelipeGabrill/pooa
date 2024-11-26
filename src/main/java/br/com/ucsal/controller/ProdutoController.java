@@ -1,16 +1,19 @@
 package br.com.ucsal.controller;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import org.reflections.Reflections;
+
 import br.com.ucsal.annotations.Rota;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet("/view/*") // Mapeia todas as requisições com "/view/*"
 public class ProdutoController extends HttpServlet {
@@ -21,7 +24,7 @@ public class ProdutoController extends HttpServlet {
     @Override
     public void init() throws ServletException {
         try {
-            // Escaneia classes de controle e configura rotas dinamicamente
+        	System.out.println("aaa");
             registerRoutes();
         } catch (Exception e) {
             throw new ServletException("Erro ao registrar rotas.", e);
@@ -29,15 +32,13 @@ public class ProdutoController extends HttpServlet {
     }
 
     private void registerRoutes() throws Exception {
-        // Classes de controle a serem escaneadas
-        Class<?>[] controllersToScan = {
-                ProdutoAdicionarServlet.class,
-                ProdutoEditarServlet.class,
-                ProdutoExcluirServlet.class,
-                ProdutoListarServlet.class
-        };
+    	System.out.println("aaaaaaaaaaaa");
 
-        for (Class<?> controllerClass : controllersToScan) {
+        Reflections reflections = new Reflections("br.com.ucsal.controller");
+
+        Set<Class<?>> controllerClasses = reflections.getTypesAnnotatedWith(WebServlet.class);
+
+        for (Class<?> controllerClass : controllerClasses) {
             Object controllerInstance = controllerClass.getDeclaredConstructor().newInstance();
             controllers.put(controllerClass.getName(), controllerInstance);
 
@@ -47,12 +48,13 @@ public class ProdutoController extends HttpServlet {
                     rotaMethods.put(path, method);
                 }
             }
-        }
+        }		
     }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = request.getPathInfo();
+ 	
+    	String path = request.getPathInfo();
         Method method = rotaMethods.get(path);
 
         if (method != null) {

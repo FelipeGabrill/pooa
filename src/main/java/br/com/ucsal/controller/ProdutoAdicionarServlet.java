@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.service.ProdutoService;
-import br.com.ucsal.util.DependencyInjector.Injector;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 
 public class ProdutoAdicionarServlet {
  private static final long serialVersionUID = 1L;
@@ -18,8 +18,7 @@ public class ProdutoAdicionarServlet {
  private ProdutoService produtoService;
 
  public ProdutoAdicionarServlet() {
-     // Injetando dependências dinamicamente
-     this.produtoService = Injector.getInstance(ProdutoService.class);
+     this.produtoService = new ProdutoService();
  }
 
  @Rota("/adicionarProduto")

@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.service.ProdutoService;
-import br.com.ucsal.util.DependencyInjector.Injector;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ public class ProdutoExcluirServlet implements Command {
 	private ProdutoService produtoService;
 
 	public ProdutoExcluirServlet() {
-	     this.produtoService = Injector.getInstance(ProdutoService.class);
+	     this.produtoService = new ProdutoService();
 	}
 
 	@Rota("/excluirProduto")

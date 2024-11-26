@@ -5,7 +5,6 @@ import java.io.IOException;
 import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.model.Produto;
 import br.com.ucsal.service.ProdutoService;
-import br.com.ucsal.util.DependencyInjector.Injector;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,7 +16,7 @@ public class ProdutoEditarServlet {
     private ProdutoService produtoService;
 
     public ProdutoEditarServlet() {
-        this.produtoService = Injector.getInstance(ProdutoService.class);
+        this.produtoService = new ProdutoService();
     }
 
     @Rota("/editarProduto")
