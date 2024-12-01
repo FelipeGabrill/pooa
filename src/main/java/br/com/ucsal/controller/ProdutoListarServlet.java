@@ -3,6 +3,7 @@ package br.com.ucsal.controller;
 import java.io.IOException;
 import java.util.List;
 
+import br.com.ucsal.annotations.CommandRota;
 import br.com.ucsal.annotations.Inject;
 import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.model.Produto;
@@ -12,7 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
+@CommandRota
 public class ProdutoListarServlet implements Command {
     private static final long serialVersionUID = 1L;
     

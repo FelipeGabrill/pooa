@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
+import org.reflections.Reflections;  // Biblioteca para escanear pacotes
+
+import br.com.ucsal.annotations.CommandRota;  // Importa a anotação ComandoRota
 import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.persistencia.PersistenciaFactory;
 import jakarta.servlet.ServletException;
@@ -20,12 +24,14 @@ public class ProdutoController extends HttpServlet {
 
     @Override
     public void init() {
-        // Escaneia as classes de comando para encontrar métodos anotados com @Rota
-        // Usamos o método mapsAndInject para registrar as rotas
-        registerCommands(ProdutoEditarServlet.class);
-        registerCommands(ProdutoAdicionarServlet.class);
-        registerCommands(ProdutoExcluirServlet.class);
-        registerCommands(ProdutoListarServlet.class);
+        // Scaneia as classes no pacote para encontrar as que possuem @ComandoRota
+        Reflections reflections = new Reflections("br.com.ucsal.controller");  // Substitua pelo seu pacote
+        Set<Class<?>> commandClasses = reflections.getTypesAnnotatedWith(CommandRota.class);
+
+        // Para cada classe anotada com @ComandoRota, registra as rotas
+        for (Class<?> commandClass : commandClasses) {
+            registerCommands(commandClass);
+        }
     }
 
     private void registerCommands(Class<?> commandClass) {
@@ -41,7 +47,7 @@ public class ProdutoController extends HttpServlet {
                     // Injeção das dependências
                     PersistenciaFactory.injectDependencies(commandInstance);
 
-                    // Mapeia a rota e registra o comando no mapa usando mapAndInject
+                    // Mapeia a rota e registra o comando no mapa
                     mapsAndInject(path, (Command) commandInstance);
 
                 } catch (Exception e) {
@@ -52,7 +58,7 @@ public class ProdutoController extends HttpServlet {
     }
 
     private void mapsAndInject(String path, Command command) {
-        // Injeção de dependências e mapeamento da rota
+        // Mapeamento da rota e injeção de dependências
         PersistenciaFactory.injectDependencies(command);
         commands.put(path, command);
     }
