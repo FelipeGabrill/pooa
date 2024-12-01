@@ -3,9 +3,8 @@ package br.com.ucsal.controller;
 import java.io.IOException;
 import java.util.List;
 
-import br.com.ucsal.annotations.DatabaseType;
 import br.com.ucsal.annotations.Inject;
-import br.com.ucsal.annotations.Type;
+import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.model.Produto;
 import br.com.ucsal.service.ProdutoService;
 import jakarta.servlet.RequestDispatcher;
@@ -21,6 +20,7 @@ public class ProdutoListarServlet implements Command {
     private ProdutoService produtoService;
 
 	@Override
+	@Rota("/listarProdutos")
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Obtém a lista de produtos
         List<Produto> produtos = produtoService.listarProdutos();

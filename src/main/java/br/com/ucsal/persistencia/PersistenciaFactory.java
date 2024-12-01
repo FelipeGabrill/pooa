@@ -22,22 +22,22 @@ public class PersistenciaFactory {
                     Object dependency;
 
                     Class<?> fieldType = field.getType();
-                    Class<?> implClass = fieldType;
+                    Class<?> iClass = fieldType;
 
                     if (fieldType.isInterface()) {
                         Type iAnnotation = field.getAnnotation(Type.class);
                         if (iAnnotation != null) {
-                            implClass = iAnnotation.value();
+                            iClass = iAnnotation.value();
                         } else {
                             throw new RuntimeException("Cannot inject dependency for interface " + fieldType.getName() + " without @ImplementedBy annotation");
                         }
                     }
 
-                    if (implClass.isAnnotationPresent(Singleton.class)) {
-                        dependency = getInstance(implClass);
+                    if (iClass.isAnnotationPresent(Singleton.class)) {
+                        dependency = getInstance(iClass);
                     } else {
-                        dependency = implClass.getDeclaredConstructor().newInstance();
-                        injectDependencies(dependency); // Recursive injection
+                        dependency = iClass.getDeclaredConstructor().newInstance();
+                        injectDependencies(dependency); 
                     }
 
                     field.setAccessible(true);
@@ -50,23 +50,23 @@ public class PersistenciaFactory {
     }
     
 	
-	public static <T> T getInstance(Class<T> clazz) {
-        if (instances.containsKey(clazz)) {
-            return (T) instances.get(clazz);
+    public static <T> T getInstance(Class<T> clazz) {
+        if (!clazz.isAnnotationPresent(Singleton.class)) {
+            throw new IllegalArgumentException("A classe " + clazz.getName() + " não está anotada com @Singleton.");
         }
 
-        if (clazz.isAnnotationPresent(Singleton.class)) {
-            try {
-                Constructor<T> constructor = clazz.getDeclaredConstructor();
-                constructor.setAccessible(true);
-                T instance = constructor.newInstance();
-                instances.put(clazz, instance);
-                return instance;
-            } catch (Exception e) {
-                throw new RuntimeException("Erro ao criar a instância do Singleton", e);
-            }
-        }
+        return (T) instances.computeIfAbsent(clazz, PersistenciaFactory::createInstance);
+    }
 
-        throw new IllegalArgumentException("A classe " + clazz.getName() + " não está anotada com @Singleton.");
+    private static <T> T createInstance(Class<T> clazz) {
+        try {
+            Constructor<T> constructor = clazz.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            return constructor.newInstance();
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("A classe " + clazz.getName() + " deve ter um construtor sem argumentos.", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao criar a instância do Singleton para a classe " + clazz.getName(), e);
+        }
     }
 }

@@ -5,6 +5,7 @@ package br.com.ucsal.controller;
 import java.io.IOException;
 
 import br.com.ucsal.annotations.Inject;
+import br.com.ucsal.annotations.Rota;
 import br.com.ucsal.service.ProdutoService;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -19,6 +20,7 @@ public class ProdutoAdicionarServlet implements Command {
  private ProdutoService produtoService;
 
  @Override
+ @Rota("adicionarProduto")
  public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
      String method = request.getMethod();
      

@@ -11,6 +11,4 @@ public class InicializadorListener implements ServletContextListener {
         // Carregue suas classes ou inicialize recursos aqui
         System.out.println("Inicializando recursos na inicialização da aplicação");
     }
-
-
 }
