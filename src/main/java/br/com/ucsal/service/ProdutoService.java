@@ -14,7 +14,8 @@ public class ProdutoService {
 	@Type(HSQLProdutoRepository.class)
 	private ProdutoRepository<Produto, Integer> produtoRepository;
 
-	public ProdutoService() {}
+	public ProdutoService() {
+	}
 		
 	public void adicionarProduto(String nome, double preco) {
 		Produto produto = new Produto(null, nome, preco);

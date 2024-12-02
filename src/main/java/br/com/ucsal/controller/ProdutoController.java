@@ -10,7 +10,7 @@ import org.reflections.Reflections;  // Biblioteca para escanear pacotes
 
 import br.com.ucsal.annotations.CommandRota;  // Importa a anotação ComandoRota
 import br.com.ucsal.annotations.Rota;
-import br.com.ucsal.persistencia.PersistenciaFactory;
+import br.com.ucsal.annotations.Implements.InjectDependencies;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -45,7 +45,7 @@ public class ProdutoController extends HttpServlet {
                     Object commandInstance = commandClass.getDeclaredConstructor().newInstance();
 
                     // Injeção das dependências
-                    PersistenciaFactory.injectDependencies(commandInstance);
+                    InjectDependencies.injectDependencies(commandInstance);
 
                     // Mapeia a rota e registra o comando no mapa
                     mapsAndInject(path, (Command) commandInstance);
@@ -59,7 +59,7 @@ public class ProdutoController extends HttpServlet {
 
     private void mapsAndInject(String path, Command command) {
         // Mapeamento da rota e injeção de dependências
-        PersistenciaFactory.injectDependencies(command);
+        InjectDependencies.injectDependencies(command);
         commands.put(path, command);
     }
 

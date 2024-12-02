@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import br.com.ucsal.annotations.Singleton;
 import br.com.ucsal.model.Produto;
 
-
 @Singleton
 public class MemoriaProdutoRepository implements ProdutoRepository<Produto, Integer>{
 
